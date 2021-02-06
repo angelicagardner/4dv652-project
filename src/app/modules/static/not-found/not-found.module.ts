@@ -14,10 +14,7 @@ import { RouterModule } from '@angular/router';
     NotFoundComponent,
   ],
   providers: [
-
-  ],
-  entryComponents: []
+  ]
 })
-
 export class NotFoundModule {
 }
