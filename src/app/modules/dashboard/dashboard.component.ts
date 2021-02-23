@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit{
 
   onGenerateDemo(){    
     this.form.patchValue({
-      AimoScore : this.random(analysis.AS.mean,analysis.AS.std),
       No_1_Angle_Deviation: this.random(analysis.AD_1.mean,analysis.AD_1.std),
       No_2_Angle_Deviation: this.random(analysis.AD_2.mean,analysis.AD_2.std),
       No_3_Angle_Deviation: this.random(analysis.AD_3.mean,analysis.AD_3.std),
@@ -65,8 +64,7 @@ export class DashboardComponent implements OnInit{
       No_24_NASM_Deviation: this.random(analysis.ND_24.mean,analysis.ND_24.std),
       No_25_NASM_Deviation: this.random(analysis.ND_25.mean,analysis.ND_25.std),
       No_1_Time_Deviation: this.random(analysis.TD_1.mean,analysis.TD_1.std),
-      No_2_Time_Deviation: this.random(analysis.TD_2.mean,analysis.TD_2.std),
-      EstimatedScore : this.random(analysis.ES.mean,analysis.ES.std)
+      No_2_Time_Deviation: this.random(analysis.TD_2.mean,analysis.TD_2.std)
     }) 
   }
 
@@ -85,7 +83,6 @@ export class DashboardComponent implements OnInit{
 
   clearForm(){
     this.form = new FormGroup({
-      AimoScore : new FormControl(),
       No_1_Angle_Deviation: new FormControl(),
       No_2_Angle_Deviation: new FormControl(),
       No_3_Angle_Deviation: new FormControl(),
@@ -125,8 +122,7 @@ export class DashboardComponent implements OnInit{
       No_24_NASM_Deviation: new FormControl(),
       No_25_NASM_Deviation: new FormControl(),
       No_1_Time_Deviation: new FormControl(),
-      No_2_Time_Deviation: new FormControl(),
-      EstimatedScore : new FormControl()
+      No_2_Time_Deviation: new FormControl()
     });
   }
   
