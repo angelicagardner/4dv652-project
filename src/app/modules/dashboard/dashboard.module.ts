@@ -16,6 +16,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 // Services
 import { ScoreService } from './score.service';
 import { ModalComponent } from './modal.component';
+import { CommaSeparatedFormComponent } from './comma-separated-form/comma-separated-form.component';
+import { NewlineSeparatedFormComponent } from './newline-separated-form/newline-separated-form.component';
+import { DefaultPredictorFormComponent } from './default-predictor-form/default-predictor-form.component';
 
 @NgModule({
   imports: [
@@ -31,7 +34,13 @@ import { ModalComponent } from './modal.component';
     MatDialogModule,
     MatTabsModule,
   ],
-  declarations: [DashboardComponent, ModalComponent],
+  declarations: [
+    DashboardComponent,
+    ModalComponent,
+    CommaSeparatedFormComponent,
+    NewlineSeparatedFormComponent,
+    DefaultPredictorFormComponent,
+  ],
   providers: [ScoreService],
 })
 export class DashboardModule {}
