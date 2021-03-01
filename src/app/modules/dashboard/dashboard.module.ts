@@ -6,15 +6,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { importExpr } from '@angular/compiler/src/output/output_ast';
 
 // Material
-import { MatButtonModule } from '@angular/material/button'
-import { MatCardModule } from '@angular/material/card'
-import { MatIconModule } from '@angular/material/icon'
-import { MatInputModule } from '@angular/material/input'
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatTabsModule } from '@angular/material/tabs';
 
 // Services
-import { ScoreService } from './score.service'
+import { ScoreService } from './score.service';
 import { ModalComponent } from './modal.component';
 
 @NgModule({
@@ -22,23 +22,16 @@ import { ModalComponent } from './modal.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild([
-      { path: '', component: DashboardComponent },
-    ]),
+    RouterModule.forChild([{ path: '', component: DashboardComponent }]),
 
     MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatInputModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule,
   ],
-  declarations: [
-    DashboardComponent,ModalComponent
-  ],
-  providers: [
-    ScoreService
-  ]
+  declarations: [DashboardComponent, ModalComponent],
+  providers: [ScoreService],
 })
-
-export class DashboardModule {
-}
+export class DashboardModule {}

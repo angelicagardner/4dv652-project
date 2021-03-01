@@ -1,6 +1,10 @@
 <h1>Dashboard</h1>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+
+
+<mat-tab-group mat-align-tabs="center">
+  <mat-tab label="Form">
+    <form [formGroup]="singleValueForm" (ngSubmit)="onSubmit(singleValueForm.value,1)">
   <mat-card class="box-card">
     <mat-card-title>Angle Deviation</mat-card-title>
     <mat-card-content>
@@ -260,7 +264,7 @@
     <button mat-fab color="primary" type="submit">
       <mat-icon>add</mat-icon>
     </button>
-    <button mat-fab color="accent" type="button" (click)="onGenerateDemo()">
+    <button mat-fab color="accent" type="button" (click)="onGenerateDemo(1)">
       <mat-icon>auto_fix_high</mat-icon>
     </button>
     <button mat-fab color="warn" type="button" (click)="onClear()">
@@ -268,3 +272,57 @@
     </button>
   </div>
 </form>
+  </mat-tab>
+  <mat-tab label="NewLine Separated">
+<form [formGroup]="newLineSeparatedForm" (ngSubmit)="onSubmit(newLineSeparatedForm.value,2)">
+  <mat-card class="box-card">
+    <mat-card-title>All Predictors</mat-card-title>
+    <mat-card-content>
+      <mat-form-field  class="streach" appearance="outline">
+        <mat-label>NewLine Separated Values</mat-label>
+        <textarea  class="streach" matInput formControlName="allValues"></textarea>
+        <mat-hint>Please enter each predictor in new line (you should not use comma between variables)</mat-hint>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="btn-container">
+    <button mat-fab color="primary" type="submit">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-fab color="accent" type="button" (click)="onGenerateDemo(2)">
+      <mat-icon>auto_fix_high</mat-icon>
+    </button>
+    <button mat-fab color="warn" type="button" (click)="onClear()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+</form>
+  </mat-tab>
+  <mat-tab label="Comma Separated">
+<form [formGroup]="commaSeparatedForm" (ngSubmit)="onSubmit(commaSeparatedForm.value,3)">
+  <mat-card class="box-card">
+    <mat-card-title>All Predictors</mat-card-title>
+    <mat-card-content>
+      <mat-form-field  class="streach"  appearance="outline">
+        <mat-label>Comma Separated Values</mat-label>
+        <textarea  class="streach"  matInput formControlName="allValues"></textarea>
+        <mat-hint>Please enter each predictor in new line and use comma as the seprator</mat-hint>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="btn-container">
+    <button mat-fab color="primary" type="submit">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-fab color="accent" type="button" (click)="onGenerateDemo(3)">
+      <mat-icon>auto_fix_high</mat-icon>
+    </button>
+    <button mat-fab color="warn" type="button" (click)="onClear()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+</form>
+  </mat-tab>
+</mat-tab-group>
