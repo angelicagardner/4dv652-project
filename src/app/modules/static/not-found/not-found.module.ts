@@ -6,15 +6,9 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      { path: '', component: NotFoundComponent },
-    ]),
+    RouterModule.forChild([{ path: '', component: NotFoundComponent }]),
   ],
-  declarations: [
-    NotFoundComponent,
-  ],
-  providers: [
-  ]
+  declarations: [NotFoundComponent],
+  providers: [],
 })
-export class NotFoundModule {
-}
+export class NotFoundModule {}

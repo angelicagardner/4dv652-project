@@ -2,7 +2,7 @@
   display: flex;
   height: 90%;
 }
-  
+
 .not-found {
   flex: 2;
   display: flex;
@@ -12,14 +12,14 @@
   align-items: center;
   justify-content: center;
 }
-  
+
 .not-found-header {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-rendering: optimizeLegibility;
   font-size: 128px;
 }
-  
+
 .not-found-message {
   color: #cfd8dc;
 }
