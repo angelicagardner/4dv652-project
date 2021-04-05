@@ -1,0 +1,21 @@
+.container {
+  justify-content: center;
+  display: flex;
+}
+
+.botton-bar {
+  justify-content: space-between;
+  display: flex;
+  margin: 1vw;
+
+  button {
+    margin: 5px;
+  }
+
+  .info {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+  }
+}

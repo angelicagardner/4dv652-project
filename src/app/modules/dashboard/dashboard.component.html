@@ -1,13 +1,15 @@
-<h1>Dashboard</h1>
-
-<mat-tab-group mat-align-tabs="center">
-  <mat-tab label="Form">
-    <app-default-predictor-form></app-default-predictor-form>
-  </mat-tab>
-  <mat-tab label="NewLine Separated">
-    <app-newline-separated-form></app-newline-separated-form>
-  </mat-tab>
-  <mat-tab label="Comma Separated">
-    <app-comma-separated-form></app-comma-separated-form>
-  </mat-tab>
-</mat-tab-group>
+<h2>Please choose an option:</h2>
+<div class="container">
+  <a routerLink="/webcam" routerLinkActive="active"
+    ><app-option-card
+      text="Using Camera"
+      image="https://cdn.vox-cdn.com/thumbor/WnLacfl9OVPN1dPqekfkLEivwSA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/20070440/jporter_200705_4087_0005.0.jpg"
+    ></app-option-card
+  ></a>
+  <a routerLink="/params" routerLinkActive="active"
+    ><app-option-card
+      text="Using Form"
+      image="https://www.altair.com/newsroom/wp-content/uploads/MainImage-2.jpg"
+    ></app-option-card
+  ></a>
+</div>
