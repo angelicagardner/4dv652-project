@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 // Services
 import { ScoreService } from './score.service';
@@ -19,13 +20,20 @@ import { ModalComponent } from './modal.component';
 import { CommaSeparatedFormComponent } from './comma-separated-form/comma-separated-form.component';
 import { NewlineSeparatedFormComponent } from './newline-separated-form/newline-separated-form.component';
 import { DefaultPredictorFormComponent } from './default-predictor-form/default-predictor-form.component';
+import { LiveFeedComponent } from './live-feed/live-feed.component';
+import { ParameterFeedComponent } from './parameter-feed/parameter-feed.component';
+import { OptionCardComponent } from './option-card/option-card.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild([{ path: '', component: DashboardComponent }]),
+    RouterModule.forChild([
+      { path: '', component: DashboardComponent },
+      { path: 'params', component: ParameterFeedComponent },
+      { path: 'webcam', component: LiveFeedComponent },
+    ]),
 
     MatButtonModule,
     MatCardModule,
@@ -33,6 +41,7 @@ import { DefaultPredictorFormComponent } from './default-predictor-form/default-
     MatInputModule,
     MatDialogModule,
     MatTabsModule,
+    MatGridListModule,
   ],
   declarations: [
     DashboardComponent,
@@ -40,6 +49,9 @@ import { DefaultPredictorFormComponent } from './default-predictor-form/default-
     CommaSeparatedFormComponent,
     NewlineSeparatedFormComponent,
     DefaultPredictorFormComponent,
+    LiveFeedComponent,
+    ParameterFeedComponent,
+    OptionCardComponent,
   ],
   providers: [ScoreService],
 })

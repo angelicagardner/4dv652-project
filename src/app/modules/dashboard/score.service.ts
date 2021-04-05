@@ -11,7 +11,7 @@ export class ScoreService {
 
   predictScore(pridictors: AimoPredictors) {
     return this.http
-      .post<ScoreResponse>('http://3.17.52.129:8000/api/v2/scores', pridictors)
+      .post<ScoreResponse>('http://rhtrv.com:8000/api/v2/scores', pridictors)
       .pipe(
         map((response) => {
           return response;

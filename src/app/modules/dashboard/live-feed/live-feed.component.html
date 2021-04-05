@@ -1,0 +1,18 @@
+<div class="botton-bar">
+  <button mat-raised-button color="primary" (click)="start()">Start</button>
+  <div class="info">
+    <span>FPS: {{ fps | number: "1.2-2" }}</span>
+    <span>Rendered: {{ rendered }}</span>
+  </div>
+  <button mat-raised-button color="accent" (click)="stop()">Stop</button>
+</div>
+<div class="container">
+  <video
+    #videofeed
+    id="video"
+    style="display: none"
+    playsinline
+    autoplay
+  ></video>
+  <canvas #canvas id="output"></canvas>
+</div>
