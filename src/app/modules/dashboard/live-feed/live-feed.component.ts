@@ -200,6 +200,7 @@ export class LiveFeedComponent {
       let title = this.add_underscore(target.part);
       headers[title + '_x'] = title + '_x';
       headers[title + '_y'] = title + '_y';
+      headers[title + '_score'] = title + '_score';
     });
 
     return headers;
@@ -213,6 +214,7 @@ export class LiveFeedComponent {
         let title = this.add_underscore(target.part);
         item[title + '_x'] = target.position.x;
         item[title + '_y'] = target.position.y;
+        item[title + '_score'] = target.score;
       });
 
       items.push(item);
