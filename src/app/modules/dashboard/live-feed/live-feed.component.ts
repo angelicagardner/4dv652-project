@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PosenetService } from 'src/app/modules/utils/posenet.service';
 import { RendererService } from 'src/app/modules/utils/renderer.service';
 import { CsvGeneratorService } from 'src/app/modules/utils/csv-generator.service';
+import { ScoreService } from '../score.service';
 
 @Component({
   selector: 'app-live-feed',
@@ -53,7 +54,8 @@ export class LiveFeedComponent {
   constructor(
     public posenetService: PosenetService,
     public renderer: RendererService,
-    public csvService: CsvGeneratorService
+    public csvService: CsvGeneratorService,
+    public scoreService: ScoreService
   ) {}
 
   async ngAfterViewInit() {
@@ -185,11 +187,16 @@ export class LiveFeedComponent {
     this.capture = false;
     this.fps = 0;
     this.rendered = 0;
-    this.csvService.download(
-      this.generatePosesHeaders(),
-      this.generatePosesItems(),
-      'posenet'
-    );
+
+    this.scoreService.sendPosnetData( {frames:this.generatePosesItems()} ).subscribe((data) => {
+      window.open(data.file, '_blank');
+    });
+
+    // this.csvService.download(
+    //   this.generatePosesHeaders(),
+    //   this.generatePosesItems(),
+    //   'posenet'
+    // );
     this.poses = [];
   }
 
