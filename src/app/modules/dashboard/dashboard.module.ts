@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 // Services
 import { ScoreService } from './score.service';
@@ -44,6 +46,8 @@ import { UploadVideoComponent } from './upload-video/upload-video.component';
     MatDialogModule,
     MatTabsModule,
     MatGridListModule,
+    MatProgressBarModule,
+    MatFormFieldModule
   ],
   declarations: [
     DashboardComponent,
