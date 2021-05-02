@@ -19,6 +19,16 @@ export class ScoreService {
       );
   }
 
+  sendPosnetData(data: PosnetData) {
+    return this.http
+      .post<ModelResponse>('http://rhtrv.com:8000/api/v3/camupload/', data)
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
+  }
+
   random(mean: number, standardDeviation: number): number {
     let result =
       mean +
@@ -237,7 +247,69 @@ export class ScoreService {
   }
 }
 
-declare interface ScoreResponse {
+export interface ModelResponse {
+  file: string;
+}
+
+export interface PosnetData {
+  frames: PosnetFrame[];
+}
+
+export interface PosnetFrame {
+  left_ankle_score: number,
+  left_ankle_x: number,
+  left_ankle_y: number,
+  left_ear_score: number,
+  left_ear_x: number,
+  left_ear_y: number,
+  left_elbow_score: number,
+  left_elbow_x: number,
+  left_elbow_y: number,
+  left_eye_score: number,
+  left_eye_x: number,
+  left_eye_y: number,
+  left_hip_score: number,
+  left_hip_x: number,
+  left_hip_y: number,
+  left_knee_score: number,
+  left_knee_x: number,
+  left_knee_y: number,
+  left_shoulder_score: number,
+  left_shoulder_x: number,
+  left_shoulder_y: number,
+  left_wrist_score: number,
+  left_wrist_x: number,
+  left_wrist_y: number,
+  nose_score: number,
+  nose_x: number,
+  nose_y: number,
+  right_ankle_score: number,
+  right_ankle_x: number,
+  right_ankle_y: number,
+  right_ear_score: number,
+  right_ear_x: number,
+  right_ear_y: number,
+  right_elbow_score: number,
+  right_elbow_x: number,
+  right_elbow_y: number,
+  right_eye_score: number,
+  right_eye_x: number,
+  right_eye_y: number,
+  right_hip_score: number,
+  right_hip_x: number,
+  right_hip_y: number,
+  right_knee_score: number,
+  right_knee_x: number,
+  right_knee_y: number,
+  right_shoulder_score: number,
+  right_shoulder_x: number,
+  right_shoulder_y: number,
+  right_wrist_score: number,
+  right_wrist_x: number,
+  right_wrist_y: number
+}
+
+export interface ScoreResponse {
   score: number;
   weakest_link: string;
 }

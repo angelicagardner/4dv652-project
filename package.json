@@ -25,6 +25,8 @@
     "@angular/router": "~11.1.2",
     "@tensorflow-models/posenet": "^2.2.2",
     "@tensorflow/tfjs-backend-webgl": "^3.3.0",
+    "@tensorflow/tfjs-converter": "^3.6.0",
+    "@tensorflow/tfjs-core": "^3.6.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

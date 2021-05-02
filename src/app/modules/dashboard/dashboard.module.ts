@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 // Services
 import { ScoreService } from './score.service';
@@ -23,6 +25,7 @@ import { DefaultPredictorFormComponent } from './default-predictor-form/default-
 import { LiveFeedComponent } from './live-feed/live-feed.component';
 import { ParameterFeedComponent } from './parameter-feed/parameter-feed.component';
 import { OptionCardComponent } from './option-card/option-card.component';
+import { UploadVideoComponent } from './upload-video/upload-video.component';
 
 @NgModule({
   imports: [
@@ -33,6 +36,7 @@ import { OptionCardComponent } from './option-card/option-card.component';
       { path: '', component: DashboardComponent },
       { path: 'params', component: ParameterFeedComponent },
       { path: 'webcam', component: LiveFeedComponent },
+      { path: 'video', component: UploadVideoComponent },
     ]),
 
     MatButtonModule,
@@ -42,6 +46,8 @@ import { OptionCardComponent } from './option-card/option-card.component';
     MatDialogModule,
     MatTabsModule,
     MatGridListModule,
+    MatProgressBarModule,
+    MatFormFieldModule
   ],
   declarations: [
     DashboardComponent,
@@ -52,6 +58,7 @@ import { OptionCardComponent } from './option-card/option-card.component';
     LiveFeedComponent,
     ParameterFeedComponent,
     OptionCardComponent,
+    UploadVideoComponent,
   ],
   providers: [ScoreService],
 })
