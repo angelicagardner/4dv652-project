@@ -2,6 +2,10 @@
   <mat-card class="box-card">
     <mat-card-title>Video Upload Form</mat-card-title>
     <mat-card-content>
+      <div class="container">
+        <video #videofeed id="video" style="display: none" playsinline autoplay></video>
+        <canvas #canvas id="output"></canvas>
+      </div>
       <div class="uploader">
         <mat-label>File</mat-label>
         <button mat-raised-button (click)="fileInput.click()">

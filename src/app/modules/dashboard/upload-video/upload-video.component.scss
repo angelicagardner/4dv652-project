@@ -10,3 +10,11 @@
     margin: 5px;
   }
 }
+
+.container {
+  display: flex;
+  padding-bottom: 25px;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+}
