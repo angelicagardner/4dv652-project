@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PosenetService } from '../../utils/posenet.service';
 import { RendererService } from '../../utils/renderer.service';
@@ -57,7 +58,8 @@ export class UploadVideoComponent implements OnDestroy {
 
   constructor(public posenetService: PosenetService,
               public renderer: RendererService,
-              public uploads: UploadService) {}
+              public uploads: UploadService,
+              public router: Router) {}
 
   onFileInput(files: FileList | null): void {
     if (files) {
@@ -190,9 +192,9 @@ export class UploadVideoComponent implements OnDestroy {
             console.log('Stop capturing');
             this.capture = false;
 
-            console.log(this.poses);
             this.poses = [];
 
+            this.router.navigate(['/skeleton']);
           });
         }
       }

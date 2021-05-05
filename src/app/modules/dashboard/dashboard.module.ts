@@ -15,6 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSliderModule } from '@angular/material/slider';
 
 // Services
 import { ScoreService } from './score.service';
@@ -26,6 +27,7 @@ import { LiveFeedComponent } from './live-feed/live-feed.component';
 import { ParameterFeedComponent } from './parameter-feed/parameter-feed.component';
 import { OptionCardComponent } from './option-card/option-card.component';
 import { UploadVideoComponent } from './upload-video/upload-video.component';
+import { SkeletonComponent } from './skeleton/skeleton.component';
 
 @NgModule({
   imports: [
@@ -37,6 +39,7 @@ import { UploadVideoComponent } from './upload-video/upload-video.component';
       { path: 'params', component: ParameterFeedComponent },
       { path: 'webcam', component: LiveFeedComponent },
       { path: 'video', component: UploadVideoComponent },
+      { path: 'skeleton', component: SkeletonComponent },
     ]),
 
     MatButtonModule,
@@ -47,7 +50,8 @@ import { UploadVideoComponent } from './upload-video/upload-video.component';
     MatTabsModule,
     MatGridListModule,
     MatProgressBarModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatSliderModule
   ],
   declarations: [
     DashboardComponent,
@@ -59,6 +63,7 @@ import { UploadVideoComponent } from './upload-video/upload-video.component';
     ParameterFeedComponent,
     OptionCardComponent,
     UploadVideoComponent,
+    SkeletonComponent,
   ],
   providers: [ScoreService],
 })
