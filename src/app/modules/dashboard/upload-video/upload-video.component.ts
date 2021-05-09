@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { PosenetService } from '../../utils/posenet.service';
 import { RendererService } from '../../utils/renderer.service';
 import { Upload, UploadService } from '../../utils/upload.service';
+import { ScoreService } from '../score.service';
 
 @Component({
   selector: 'app-upload-video',
@@ -59,11 +60,14 @@ export class UploadVideoComponent implements OnDestroy {
   constructor(public posenetService: PosenetService,
               public renderer: RendererService,
               public uploads: UploadService,
+              public service: ScoreService,
               public router: Router) {}
 
   onFileInput(files: FileList | null): void {
     if (files) {
       this.file = files.item(0)
+      console.log(files);
+
     }
   }
 
@@ -152,6 +156,29 @@ export class UploadVideoComponent implements OnDestroy {
     poseDetectionFrame();
   }
 
+  generatePosesItems() {
+    const items = [];
+    this.poses.forEach((pose) => {
+      let item = {};
+      pose.forEach((target) => {
+        let title = this.add_underscore(target.part);
+        item[title + '_x'] = target.position.x;
+        item[title + '_y'] = target.position.y;
+        item[title + '_score'] = target.score;
+      });
+
+      items.push(item);
+    });
+
+    return items;
+  }
+
+  add_underscore(label: string) {
+    return label.replace(/[A-Z]/g, function (key) {
+      return '_' + key.toLowerCase();
+    });
+  }
+
   onSubmit() {
     if (this.file) {
       const reader = new FileReader()
@@ -192,6 +219,7 @@ export class UploadVideoComponent implements OnDestroy {
             console.log('Stop capturing');
             this.capture = false;
 
+            this.service.savePosnetPoses( this.generatePosesItems() )
             this.poses = [];
 
             this.router.navigate(['/skeleton']);
@@ -199,14 +227,6 @@ export class UploadVideoComponent implements OnDestroy {
         }
       }
       reader.readAsArrayBuffer(this.file)
-
-    //   this.subscription = this.uploads.upload(this.file)
-    //     .subscribe((upload) => {
-    //       this.upload = upload
-    //       if( upload.body ){
-    //         window.open(upload.body.file, '_blank');
-    //       }
-    //     })
     }
   }
 

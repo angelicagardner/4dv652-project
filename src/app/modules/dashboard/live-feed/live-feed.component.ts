@@ -3,6 +3,7 @@ import { PosenetService } from 'src/app/modules/utils/posenet.service';
 import { RendererService } from 'src/app/modules/utils/renderer.service';
 import { CsvGeneratorService } from 'src/app/modules/utils/csv-generator.service';
 import { ScoreService } from '../score.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-live-feed',
@@ -55,6 +56,7 @@ export class LiveFeedComponent {
     public posenetService: PosenetService,
     public renderer: RendererService,
     public csvService: CsvGeneratorService,
+    public router:Router,
     public scoreService: ScoreService
   ) {}
 
@@ -188,8 +190,8 @@ export class LiveFeedComponent {
     this.fps = 0;
     this.rendered = 0;
 
-    this.scoreService.sendPosnetData( {frames:this.generatePosesItems()} ).subscribe((data) => {
-      window.open(data.file, '_blank');
+    this.scoreService.sendPosnetData( this.generatePosesItems() ).subscribe((data) => {
+      this.router.navigate(['/skeleton']);
     });
 
     // this.csvService.download(

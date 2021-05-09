@@ -2,16 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import * as config from './config.json';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScoreService {
+  private posenet_frames: Observable<PosnetFrame[]>
+
   constructor(private http: HttpClient) {}
+
+  get_posenet_frames() {
+    return this.posenet_frames;
+  }
 
   predictScore(pridictors: AimoPredictors) {
     return this.http
-      .post<ScoreResponse>('http://rhtrv.com:8000/api/v2/scores', pridictors)
+      .post<ScoreResponse>('http://127.0.0.1:8000/api/v2/scores', pridictors)
       .pipe(
         map((response) => {
           return response;
@@ -19,9 +26,16 @@ export class ScoreService {
       );
   }
 
-  sendPosnetData(data: PosnetData) {
+  savePosnetPoses(data: PosnetFrame[]) {
+    this.posenet_frames = new Observable((observer)=>{
+      observer.next(data)
+    })
+  }
+
+  sendPosnetData(data: PosnetFrame[]) {
+
     return this.http
-      .post<ModelResponse>('http://rhtrv.com:8000/api/v3/camupload/', data)
+      .post<ModelResponse>('http://localhost:8000/api/v3/camupload/', {frames:data})
       .pipe(
         map((response) => {
           return response;
@@ -248,7 +262,7 @@ export class ScoreService {
 }
 
 export interface ModelResponse {
-  file: string;
+  frames: KinectFrame[];
 }
 
 export interface PosnetData {
@@ -307,6 +321,48 @@ export interface PosnetFrame {
   right_wrist_score: number,
   right_wrist_x: number,
   right_wrist_y: number
+}
+
+export interface KinectFrame {
+  head_x: number,
+  head_y: number,
+  head_z: number,
+  left_ankle_x: number,
+  left_ankle_y: number,
+  left_ankle_z: number,
+  left_elbow_x: number,
+  left_elbow_y: number,
+  left_elbow_z: number,
+  left_hip_x: number,
+  left_hip_y: number,
+  left_hip_z: number,
+  left_knee_x: number,
+  left_knee_y: number,
+  left_knee_z: number,
+  left_shoulder_x: number,
+  left_shoulder_y: number,
+  left_shoulder_z: number,
+  left_wrist_x: number,
+  left_wrist_y: number,
+  left_wrist_z: number,
+  right_ankle_x: number,
+  right_ankle_y: number,
+  right_ankle_z: number,
+  right_elbow_x: number,
+  right_elbow_y: number,
+  right_elbow_z: number,
+  right_hip_x: number,
+  right_hip_y: number,
+  right_hip_z: number,
+  right_knee_x: number,
+  right_knee_y: number,
+  right_knee_z: number,
+  right_shoulder_x: number,
+  right_shoulder_y: number,
+  right_shoulder_z: number,
+  right_wrist_x: number,
+  right_wrist_y: number,
+  right_wrist_z: number
 }
 
 export interface ScoreResponse {
