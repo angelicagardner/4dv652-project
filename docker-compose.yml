@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  frontend:
+    image: 4dv652-frontend
+    hostname: 4dv652-frontend
+    container_name: 4dv652-frontend  # Container name
+    build:
+      context: ./
+    ports:
+      - '9000:80'
