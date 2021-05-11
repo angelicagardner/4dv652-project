@@ -10,11 +10,11 @@ import { Observable, Subject } from 'rxjs';
 export class PosenetService {
   constructor() {}
 
-  async getNet() {
+  async getNet(resolution={ width: 257, height: 200 }) {
     return posenet.load({
       architecture: 'ResNet50',
       outputStride: 32,
-      inputResolution: { width: 257, height: 200 },
+      inputResolution: resolution,
       quantBytes: 2,
     });
   }
