@@ -1,18 +1,22 @@
 <html>
-  <head>
-    <!-- Load TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <!-- Load Posenet -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
-  </head>
 
-  <body>
-    <video id="video" playsinline autoplay style="display:none"  allow="autoplay">
-      <source src='videos/AIMO-Scan.mp4' type='video/mp4'>
-    </video>
-    <canvas id="output">
-  </body>
-  <!-- Place your code in the script tag below. You can also use an external .js file -->
+<head>
+  <!-- Load TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <!-- Load Posenet -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+</head>
 
-  <script src="posenet_webcam.js"></script>
+<body>
+  <input id="videoFiles" type="file" multiple />
+  <button id="parsebtn" type="button">Generate CSV!</button>
+
+  <video id="video" playsinline autoplay style="display:none" allow="autoplay">
+  </video>
+  <canvas id="output">
+</body>
+<!-- Place your code in the script tag below. You can also use an external .js file -->
+
+<script src="posenet_webcam.js"></script>
+
 </html>

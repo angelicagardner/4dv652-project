@@ -114,11 +114,11 @@ function renderImageToCanvas(image, size, canvas) {
 }
 
 const state = {
-  algorithm: "single-pose",
+  algorithm: 'single-pose',
   input: {
-    architecture: "ResNet50",
-    outputStride: 32,
-    inputResolution: 250,
+    architecture: 'ResNet50',
+    outputStride: 16,
+    inputResolution: 600,
     multiplier: 1,
     quantBytes: 2,
   },
@@ -139,70 +139,122 @@ const state = {
     showBoundingBox: false,
   },
   net: null,
+  files:null
 };
 
-const videoWidth = 600;
-const videoHeight = 500;
+const videoWidth = 960;
+const videoHeight = 540;
+let fIndex = 0;
+const reader = new FileReader()
+let video
+let poses = [];
 
-/**
- * Loads a the camera to be used in the demo
- *
- */
-async function setupCamera() {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    throw new Error(
-      "Browser API navigator.mediaDevices.getUserMedia not available"
-    );
+reader.onload = async (e) => {
+  // The file reader gives us an ArrayBuffer:
+  let buffer = e.target.result;
+
+  // We have to convert the buffer to a blob:
+  if( typeof buffer != 'string'){
+    let videoBlob = new Blob([new Uint8Array(buffer)], { type: 'mp4' });
+
+    // The blob gives us a URL to the video file:
+    let url = window.URL.createObjectURL(videoBlob);
+
+    video.src = url;
+    video.load()
+  }
+}
+
+function generatePosesHeaders(poses) {
+  const headers = {};
+  poses[0].keypoints.forEach((target) => {
+    let title = this.add_underscore(target.part);
+    headers[title + '_x'] = title + '_x';
+    headers[title + '_y'] = title + '_y';
+    headers[title + '_score'] = title + '_score';
+  });
+
+  return headers;
+}
+
+function generatePosesItems(poses) {
+  const items = [];
+  poses.forEach((pose) => {
+    let item = {};
+    pose.keypoints.forEach((target) => {
+      let title = add_underscore(target.part);
+      item[title + '_x'] = target.position.x;
+      item[title + '_y'] = target.position.y;
+      item[title + '_score'] = target.score;
+    });
+
+    items.push(item);
+  });
+
+  return items;
+}
+
+function add_underscore(label) {
+  return label.replace(/[A-Z]/g, function (key) {
+    return '_' + key.toLowerCase();
+  });
+}
+
+function convertToCSV(objArray) {
+  var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+  var str = '';
+
+  for (var i = 0; i < array.length; i++) {
+    var line = '';
+    for (var index in array[i]) {
+      if (line != '') line += ',';
+
+      line += array[i][index];
+    }
+
+    str += line + '\r\n';
   }
 
-  const video = document.getElementById("video");
-  video.width = videoWidth;
-  video.height = videoHeight;
-
-  const mobile = false;
-  const stream = await navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: {
-      facingMode: "user",
-      width: mobile ? undefined : videoWidth,
-      height: mobile ? undefined : videoHeight,
-    },
-  });
-  video.srcObject = stream;
-
-  return new Promise((resolve) => {
-    video.onloadedmetadata = () => {
-      resolve(video);
-    };
-  });
+  return str;
 }
 
-async function loadVideo() {
-  const video = await setupCamera();
+function exportCSVFile(headers, items, fileTitle) {
+  if (headers) {
+    items.unshift(headers);
+  }
 
-  return video;
+  // Convert Object to JSON
+  var jsonObject = JSON.stringify(items);
+
+  var csv = this.convertToCSV(jsonObject);
+
+  var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  if (navigator.msSaveBlob) {
+    // IE 10+
+    navigator.msSaveBlob(blob, exportedFilenmae);
+  } else {
+    var link = document.createElement('a');
+    if (link.download !== undefined) {
+      // feature detection
+      // Browsers that support HTML5 download attribute
+      var url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', exportedFilenmae);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
 }
 
-async function setupVideo() {
-  const video = document.getElementById("video");
-  video.width = videoWidth;
-  video.height = videoHeight;
-
-  return new Promise((resolve) => {
-    video.onprogress = () => {
-      resolve(video);
-    };
-  });
+function download(headers, items, fileTitle) {
+  this.exportCSVFile(headers, items, fileTitle); // call the exportCSVFile() function to process the JSON and trigger the download
 }
-
-async function loadVideoSrc() {
-  const video = await setupVideo();
-  video.play();
-  console.log("booo");
-  return video;
-}
-
-function detectPoseInRealTime(video, net) {
+let frame =1
+async function detectPoseInRealTime(video) {
   const canvas = document.getElementById("output");
   const ctx = canvas.getContext("2d");
 
@@ -216,11 +268,10 @@ function detectPoseInRealTime(video, net) {
   canvas.height = videoHeight;
 
   async function poseDetectionFrame() {
-    let poses = [];
     let minPoseConfidence;
     let minPartConfidence;
 
-    const pose = await net.estimatePoses(video, {
+    const pose = await state.net.estimatePoses(video, {
       flipHorizontal: flipPoseHorizontal,
       decodingMethod: "single-person",
     });
@@ -243,7 +294,7 @@ function detectPoseInRealTime(video, net) {
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence
     // scores
-    poses.forEach(({ score, keypoints }) => {
+    pose.forEach(({ score, keypoints }) => {
       if (score >= minPoseConfidence) {
         if (state.output.showPoints) {
           drawKeypoints(keypoints, minPartConfidence, ctx);
@@ -256,35 +307,71 @@ function detectPoseInRealTime(video, net) {
         }
       }
     });
-
     requestAnimationFrame(poseDetectionFrame);
   }
 
-  poseDetectionFrame();
+  await poseDetectionFrame();
 }
 
-async function bindPage() {
-  const net = await posenet.load({
-    architecture: state.input.architecture,
-    outputStride: state.input.outputStride,
-    inputResolution: state.input.inputResolution,
-    multiplier: state.input.multiplier,
-    quantBytes: state.input.quantBytes,
+async function run(){
+  if (fIndex < state.files.length) {
+    const vFile = state.files[fIndex]
+    reader.readAsArrayBuffer(vFile)
+  }
+  else{
+    location.reload();
+  }
+}
+
+async function intialProcess() {
+  state.net = await posenet.load({
+      architecture: 'ResNet50',
+      outputStride: 32,
+      inputResolution: {
+        width: videoWidth / 2,
+        height: videoHeight / 2
+      },
+      quantBytes: 2,
   });
 
-  let video;
+  fIndex=0
 
-  try {
-    video = await loadVideo();
-  } catch (e) {
-    alert(
-      "this browser does not support video capture," +
-        "or this device does not have a camera"
-    );
-    throw e;
-  }
-
-  detectPoseInRealTime(video, net);
+  run()
 }
 
-bindPage();
+
+
+(()=>{
+  document.querySelector('#parsebtn').addEventListener('click', ()=>{
+    video = document.getElementById("video");
+    video.width = videoWidth;
+    video.height = videoHeight;
+
+    video.addEventListener('loadeddata', async () => {
+      console.log('start capturing');
+      await detectPoseInRealTime(video, state.net);
+    });
+
+
+    video.addEventListener('ended', () => {
+      console.log('Stop capturing');
+      // Save poses
+      const regex = /\..*/i;
+      exportCSVFile(
+        this.generatePosesHeaders(poses),
+        this.generatePosesItems(poses),
+        state.files[fIndex].name.replace(regex, ''))
+
+      poses = [];
+      fIndex++
+      setTimeout(() => {
+        run()
+      }, 500);
+    });
+
+    state.files = document.querySelector('#videoFiles').files
+    intialProcess()
+    console.log('done');
+  })
+})()
+
