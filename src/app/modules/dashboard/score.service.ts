@@ -18,7 +18,7 @@ export class ScoreService {
 
   predictScore(pridictors: AimoPredictors) {
     return this.http
-      .post<ScoreResponse>('http://127.0.0.1:8000/api/v2/scores', pridictors)
+      .post<ScoreResponse>('http://rhtrv.com:8000/api/v2/scores', pridictors)
       .pipe(
         map((response) => {
           return response;
@@ -35,7 +35,7 @@ export class ScoreService {
   sendPosnetData(data: PosnetFrame[]) {
 
     return this.http
-      .post<ModelResponse>('http://localhost:8000/api/v3/camupload/', {frames:data})
+      .post<ModelResponse>('http://rhtrv.com:8000/api/v3/camupload/', {frames:data})
       .pipe(
         map((response) => {
           return response;
