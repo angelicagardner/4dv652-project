@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ScoreService {
-  private posenet_frames: Observable<PosnetFrame[]>
+  private posenet_frames: Observable<PosnetFrame[]>;
 
   constructor(private http: HttpClient) {}
 
@@ -27,15 +27,16 @@ export class ScoreService {
   }
 
   savePosnetPoses(data: PosnetFrame[]) {
-    this.posenet_frames = new Observable((observer)=>{
-      observer.next(data)
-    })
+    this.posenet_frames = new Observable((observer) => {
+      observer.next(data);
+    });
   }
 
   sendPosnetData(data: PosnetFrame[]) {
-
     return this.http
-      .post<ModelResponse>('http://rhtrv.com:8000/api/v3/camupload/', {frames:data})
+      .post<ModelResponse>('http://rhtrv.com:8000/api/v3/camupload/', {
+        frames: data,
+      })
       .pipe(
         map((response) => {
           return response;
@@ -263,6 +264,7 @@ export class ScoreService {
 
 export interface ModelResponse {
   frames: KinectFrame[];
+  isGood: boolean;
 }
 
 export interface PosnetData {
@@ -270,99 +272,99 @@ export interface PosnetData {
 }
 
 export interface PosnetFrame {
-  left_ankle_score: number,
-  left_ankle_x: number,
-  left_ankle_y: number,
-  left_ear_score: number,
-  left_ear_x: number,
-  left_ear_y: number,
-  left_elbow_score: number,
-  left_elbow_x: number,
-  left_elbow_y: number,
-  left_eye_score: number,
-  left_eye_x: number,
-  left_eye_y: number,
-  left_hip_score: number,
-  left_hip_x: number,
-  left_hip_y: number,
-  left_knee_score: number,
-  left_knee_x: number,
-  left_knee_y: number,
-  left_shoulder_score: number,
-  left_shoulder_x: number,
-  left_shoulder_y: number,
-  left_wrist_score: number,
-  left_wrist_x: number,
-  left_wrist_y: number,
-  nose_score: number,
-  nose_x: number,
-  nose_y: number,
-  right_ankle_score: number,
-  right_ankle_x: number,
-  right_ankle_y: number,
-  right_ear_score: number,
-  right_ear_x: number,
-  right_ear_y: number,
-  right_elbow_score: number,
-  right_elbow_x: number,
-  right_elbow_y: number,
-  right_eye_score: number,
-  right_eye_x: number,
-  right_eye_y: number,
-  right_hip_score: number,
-  right_hip_x: number,
-  right_hip_y: number,
-  right_knee_score: number,
-  right_knee_x: number,
-  right_knee_y: number,
-  right_shoulder_score: number,
-  right_shoulder_x: number,
-  right_shoulder_y: number,
-  right_wrist_score: number,
-  right_wrist_x: number,
-  right_wrist_y: number
+  left_ankle_score: number;
+  left_ankle_x: number;
+  left_ankle_y: number;
+  left_ear_score: number;
+  left_ear_x: number;
+  left_ear_y: number;
+  left_elbow_score: number;
+  left_elbow_x: number;
+  left_elbow_y: number;
+  left_eye_score: number;
+  left_eye_x: number;
+  left_eye_y: number;
+  left_hip_score: number;
+  left_hip_x: number;
+  left_hip_y: number;
+  left_knee_score: number;
+  left_knee_x: number;
+  left_knee_y: number;
+  left_shoulder_score: number;
+  left_shoulder_x: number;
+  left_shoulder_y: number;
+  left_wrist_score: number;
+  left_wrist_x: number;
+  left_wrist_y: number;
+  nose_score: number;
+  nose_x: number;
+  nose_y: number;
+  right_ankle_score: number;
+  right_ankle_x: number;
+  right_ankle_y: number;
+  right_ear_score: number;
+  right_ear_x: number;
+  right_ear_y: number;
+  right_elbow_score: number;
+  right_elbow_x: number;
+  right_elbow_y: number;
+  right_eye_score: number;
+  right_eye_x: number;
+  right_eye_y: number;
+  right_hip_score: number;
+  right_hip_x: number;
+  right_hip_y: number;
+  right_knee_score: number;
+  right_knee_x: number;
+  right_knee_y: number;
+  right_shoulder_score: number;
+  right_shoulder_x: number;
+  right_shoulder_y: number;
+  right_wrist_score: number;
+  right_wrist_x: number;
+  right_wrist_y: number;
 }
 
 export interface KinectFrame {
-  head_x: number,
-  head_y: number,
-  head_z: number,
-  left_ankle_x: number,
-  left_ankle_y: number,
-  left_ankle_z: number,
-  left_elbow_x: number,
-  left_elbow_y: number,
-  left_elbow_z: number,
-  left_hip_x: number,
-  left_hip_y: number,
-  left_hip_z: number,
-  left_knee_x: number,
-  left_knee_y: number,
-  left_knee_z: number,
-  left_shoulder_x: number,
-  left_shoulder_y: number,
-  left_shoulder_z: number,
-  left_wrist_x: number,
-  left_wrist_y: number,
-  left_wrist_z: number,
-  right_ankle_x: number,
-  right_ankle_y: number,
-  right_ankle_z: number,
-  right_elbow_x: number,
-  right_elbow_y: number,
-  right_elbow_z: number,
-  right_hip_x: number,
-  right_hip_y: number,
-  right_hip_z: number,
-  right_knee_x: number,
-  right_knee_y: number,
-  right_knee_z: number,
-  right_shoulder_x: number,
-  right_shoulder_y: number,
-  right_shoulder_z: number,
-  right_wrist_x: number,
-  right_wrist_y: number,
-  right_wrist_z: number
+  head_x: number;
+  head_y: number;
+  head_z: number;
+  left_ankle_x: number;
+  left_ankle_y: number;
+  left_ankle_z: number;
+  left_elbow_x: number;
+  left_elbow_y: number;
+  left_elbow_z: number;
+  left_hip_x: number;
+  left_hip_y: number;
+  left_hip_z: number;
+  left_knee_x: number;
+  left_knee_y: number;
+  left_knee_z: number;
+  left_shoulder_x: number;
+  left_shoulder_y: number;
+  left_shoulder_z: number;
+  left_wrist_x: number;
+  left_wrist_y: number;
+  left_wrist_z: number;
+  right_ankle_x: number;
+  right_ankle_y: number;
+  right_ankle_z: number;
+  right_elbow_x: number;
+  right_elbow_y: number;
+  right_elbow_z: number;
+  right_hip_x: number;
+  right_hip_y: number;
+  right_hip_z: number;
+  right_knee_x: number;
+  right_knee_y: number;
+  right_knee_z: number;
+  right_shoulder_x: number;
+  right_shoulder_y: number;
+  right_shoulder_z: number;
+  right_wrist_x: number;
+  right_wrist_y: number;
+  right_wrist_z: number;
 }
 
 export interface ScoreResponse {
