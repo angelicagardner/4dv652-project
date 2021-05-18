@@ -9,4 +9,23 @@
     width: 800px;
     height: 800px;
   }
+
+  span {
+    width: 250px;
+    padding: 28px;
+    color: white;
+    align-self: center;
+    text-align: center;
+    font-size: 32px;
+    border-radius: 7px;
+    border: white;
+  }
+
+  .good {
+    background-color: rgb(111, 185, 0);
+  }
+
+  .bad {
+    background-color: red;
+  }
 }

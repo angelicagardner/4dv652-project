@@ -56,7 +56,7 @@ export class LiveFeedComponent {
     public posenetService: PosenetService,
     public renderer: RendererService,
     public csvService: CsvGeneratorService,
-    public router:Router,
+    public router: Router,
     public scoreService: ScoreService
   ) {}
 
@@ -190,16 +190,10 @@ export class LiveFeedComponent {
     this.fps = 0;
     this.rendered = 0;
 
-    this.scoreService.sendPosnetData( this.generatePosesItems() ).subscribe((data) => {
-      this.router.navigate(['/skeleton']);
-    });
-
-    // this.csvService.download(
-    //   this.generatePosesHeaders(),
-    //   this.generatePosesItems(),
-    //   'posenet'
-    // );
+    this.scoreService.savePosnetPoses(this.generatePosesItems());
     this.poses = [];
+
+    this.router.navigate(['/skeleton']);
   }
 
   generatePosesHeaders() {

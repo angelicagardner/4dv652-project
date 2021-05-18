@@ -7,12 +7,12 @@ import { ScoreService } from '../score.service';
 @Component({
   selector: 'app-skeleton',
   templateUrl: './skeleton.component.html',
-  styleUrls: ['./skeleton.component.scss']
+  styleUrls: ['./skeleton.component.scss'],
 })
 export class SkeletonComponent implements OnInit {
   @ViewChild('canvas') canvasElement: ElementRef;
-  private analysis: Observable<any>; 
-  private poses: Observable<any>;;
+  private analysis: Observable<any>;
+  private poses: Observable<any>;
   private horizontal_zoom = 1024;
   private vertical_zoom = 1024;
   private horizontal_offset = 512;
@@ -23,35 +23,34 @@ export class SkeletonComponent implements OnInit {
   private vertex_color = 'rgba(255,165,0,1)';
   private edge_color = 'rgba(25,25,25,1)'; // not working
 
-  private canvas
-  private vertices = []
-  private edges = []
-  private pause = false
-  private zr = 3.1415
-  private xr = 0
-  private yr = 0
+  private canvas;
+  private vertices = [];
+  private edges = [];
+  private pause = false;
+  private zr = 3.1415;
+  private xr = 0;
+  private yr = 0;
+  isGood = null;
 
-  private kinect = []
+  private kinect = [];
 
-  constructor(public route: ActivatedRoute, public service:ScoreService) {
+  constructor(public route: ActivatedRoute, public service: ScoreService) {}
 
+  sliderUpdate(value) {
+    this.yr = value;
   }
-
-  sliderUpdate(value){
-    this.yr = value
-  }
-  ngAfterViewInit():void {
-    this.service.get_posenet_frames().subscribe((data)=> {
-      this.service.sendPosnetData(data).subscribe((resp)=>{
-        this.kinect = resp.frames
+  ngAfterViewInit(): void {
+    this.service.get_posenet_frames().subscribe((data) => {
+      this.service.sendPosnetData(data).subscribe((resp) => {
+        this.isGood = resp.isGood;
+        this.kinect = resp.frames;
         this.canvas = this.canvasElement.nativeElement;
-        this.render(this.kinect)
-      })
-    })
+        this.render(this.kinect);
+      });
+    });
   }
 
   ngOnInit(): void {}
-
 
   draw() {
     const ctx_draw = () => {
@@ -62,10 +61,22 @@ export class SkeletonComponent implements OnInit {
       for (let j = 0; j < this.edges.length; j++) {
         var edge_start = this.vertices[this.edges[j][0]];
         var edge_end = this.vertices[this.edges[j][1]];
-        var lineStartX = edge_start[0] * this.horizontal_zoom / (this.depth_offset - edge_start[2]) + this.horizontal_offset;
-        var lineStartY = edge_start[1] * this.vertical_zoom / (this.depth_offset - edge_start[2]) + this.vertical_offset;
-        var lineEndX = edge_end[0] * this.horizontal_zoom / (this.depth_offset - edge_end[2]) + this.horizontal_offset;
-        var lineEndY = edge_end[1] * this.vertical_zoom / (this.depth_offset - edge_end[2]) + this.vertical_offset;
+        var lineStartX =
+          (edge_start[0] * this.horizontal_zoom) /
+            (this.depth_offset - edge_start[2]) +
+          this.horizontal_offset;
+        var lineStartY =
+          (edge_start[1] * this.vertical_zoom) /
+            (this.depth_offset - edge_start[2]) +
+          this.vertical_offset;
+        var lineEndX =
+          (edge_end[0] * this.horizontal_zoom) /
+            (this.depth_offset - edge_end[2]) +
+          this.horizontal_offset;
+        var lineEndY =
+          (edge_end[1] * this.vertical_zoom) /
+            (this.depth_offset - edge_end[2]) +
+          this.vertical_offset;
         ctx.beginPath();
         ctx.moveTo(lineStartX, lineStartY);
         ctx.lineTo(lineEndX, lineEndY);
@@ -77,11 +88,20 @@ export class SkeletonComponent implements OnInit {
       for (let i = 0; i < this.vertices.length; i++) {
         var point = this.vertices[i];
         ctx.beginPath();
-        ctx.arc(point[0] * this.horizontal_zoom / (this.depth_offset - point[2]) + this.horizontal_offset, point[1] * this.vertical_zoom / (this.depth_offset - point[2]) + this.vertical_offset, this.vertex_radius / (this.depth_offset - point[2]) / 2, 0, Math.PI * 2, true);
+        ctx.arc(
+          (point[0] * this.horizontal_zoom) / (this.depth_offset - point[2]) +
+            this.horizontal_offset,
+          (point[1] * this.vertical_zoom) / (this.depth_offset - point[2]) +
+            this.vertical_offset,
+          this.vertex_radius / (this.depth_offset - point[2]) / 2,
+          0,
+          Math.PI * 2,
+          true
+        );
         ctx.fill();
       }
       reqanim = window.requestAnimationFrame(ctx_draw);
-    }
+    };
 
     if (this.canvas.getContext) {
       var ctx = this.canvas.getContext('2d');
@@ -92,7 +112,7 @@ export class SkeletonComponent implements OnInit {
 
       var mouse_down = false;
 
-      const that = this
+      const that = this;
 
       ctx_draw();
 
@@ -105,17 +125,17 @@ export class SkeletonComponent implements OnInit {
       });
       this.canvas.addEventListener('mousedown', function (e) {
         mouse_down = true;
-        that.pause = true
+        that.pause = true;
       });
       this.canvas.addEventListener('mouseup', function (e) {
         mouse_down = false;
-        that.pause = false
+        that.pause = false;
       });
       function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
         return {
           x: evt.clientX - rect.left,
-          y: evt.clientY - rect.top
+          y: evt.clientY - rect.top,
         };
       }
       this.canvas.addEventListener('mousemove', function (e) {
@@ -132,8 +152,6 @@ export class SkeletonComponent implements OnInit {
           that.set_yr((mouse_y_prev - mouse_y) / 100);
         }
       });
-
-
     }
   }
 
@@ -174,42 +192,50 @@ export class SkeletonComponent implements OnInit {
   }
 
   sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   get_vertices(frame) {
-    let v = []
-    v.push([frame.head_x, frame.head_y, frame.head_z])  // 0
-    v.push([frame.left_shoulder_x, frame.left_shoulder_y, frame.left_shoulder_z]) // 1
-    v.push([frame.left_elbow_x, frame.left_elbow_y, frame.left_elbow_z]) // 2
-    v.push([frame.right_shoulder_x, frame.right_shoulder_y, frame.right_shoulder_z]) // 3
-    v.push([frame.right_elbow_x, frame.right_elbow_y, frame.right_elbow_z]) // 4
-    v.push([frame.left_hand_x, frame.left_hand_y, frame.left_hand_z]) // 5
-    v.push([frame.right_hand_x, frame.right_hand_y, frame.right_hand_z]) // 6
-    v.push([frame.left_hip_x, frame.left_hip_y, frame.left_hip_z]) // 7
-    v.push([frame.right_hip_x, frame.right_hip_y, frame.right_hip_z]) // 8
-    v.push([frame.left_knee_x, frame.left_knee_y, frame.left_knee_z]) // 9
-    v.push([frame.right_knee_x, frame.right_knee_y, frame.right_knee_z]) // 10
-    v.push([frame.left_foot_x, frame.left_foot_y, frame.left_foot_z]) // 11
-    v.push([frame.right_foot_x, frame.right_foot_y, frame.right_foot_z]) // 12
+    let v = [];
+    v.push([frame.head_x, frame.head_y, frame.head_z]); // 0
+    v.push([
+      frame.left_shoulder_x,
+      frame.left_shoulder_y,
+      frame.left_shoulder_z,
+    ]); // 1
+    v.push([frame.left_elbow_x, frame.left_elbow_y, frame.left_elbow_z]); // 2
+    v.push([
+      frame.right_shoulder_x,
+      frame.right_shoulder_y,
+      frame.right_shoulder_z,
+    ]); // 3
+    v.push([frame.right_elbow_x, frame.right_elbow_y, frame.right_elbow_z]); // 4
+    v.push([frame.left_hand_x, frame.left_hand_y, frame.left_hand_z]); // 5
+    v.push([frame.right_hand_x, frame.right_hand_y, frame.right_hand_z]); // 6
+    v.push([frame.left_hip_x, frame.left_hip_y, frame.left_hip_z]); // 7
+    v.push([frame.right_hip_x, frame.right_hip_y, frame.right_hip_z]); // 8
+    v.push([frame.left_knee_x, frame.left_knee_y, frame.left_knee_z]); // 9
+    v.push([frame.right_knee_x, frame.right_knee_y, frame.right_knee_z]); // 10
+    v.push([frame.left_foot_x, frame.left_foot_y, frame.left_foot_z]); // 11
+    v.push([frame.right_foot_x, frame.right_foot_y, frame.right_foot_z]); // 12
 
-    return v
+    return v;
   }
 
   set_xr(r) {
-    this.xr = r
+    this.xr = r;
   }
 
   set_yr(r) {
-    this.yr = r
+    this.yr = r;
   }
 
   async render(frames) {
-    let loop = 15
+    let loop = 15;
     while (loop > 0) {
       for (const frame of frames) {
         while (this.pause) {
-          await this.sleep(100)
+          await this.sleep(100);
         }
 
         this.vertices = this.get_vertices(frame);
@@ -226,21 +252,17 @@ export class SkeletonComponent implements OnInit {
           [8, 10],
           [7, 9],
           [9, 11],
-          [10, 12]
+          [10, 12],
         ];
-
-
 
         this.draw();
 
         this.rotateZ(this.zr);
         this.rotateY(this.yr);
 
-        await this.sleep(75)
-
+        await this.sleep(75);
       }
-      loop--
+      loop--;
     }
   }
-
 }
