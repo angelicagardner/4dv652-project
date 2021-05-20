@@ -174,6 +174,8 @@ function generatePosesHeaders(poses) {
     headers[title + '_score'] = title + '_score';
   });
 
+  headers['score'] = 'score'
+
   return headers;
 }
 
@@ -188,9 +190,9 @@ function generatePosesItems(poses) {
       item[title + '_score'] = target.score;
     });
 
+    item['score'] = pose.score
     items.push(item);
   });
-
   return items;
 }
 
@@ -268,8 +270,8 @@ async function detectPoseInRealTime(video) {
   canvas.height = videoHeight;
 
   async function poseDetectionFrame() {
-    let minPoseConfidence;
-    let minPartConfidence;
+    let minPoseConfidence = 0;
+    let minPartConfidence = 0;
 
     const pose = await state.net.estimatePoses(video, {
       flipHorizontal: flipPoseHorizontal,
@@ -278,8 +280,8 @@ async function detectPoseInRealTime(video) {
 
     poses = poses.concat(pose);
 
-    minPoseConfidence = +state.singlePoseDetection.minPoseConfidence;
-    minPartConfidence = +state.singlePoseDetection.minPartConfidence;
+    // minPoseConfidence = +state.singlePoseDetection.minPoseConfidence;
+    // minPartConfidence = +state.singlePoseDetection.minPartConfidence;
 
     ctx.clearRect(0, 0, videoWidth, videoHeight);
 
