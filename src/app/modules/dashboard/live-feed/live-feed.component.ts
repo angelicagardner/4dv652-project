@@ -4,6 +4,7 @@ import { RendererService } from 'src/app/modules/utils/renderer.service';
 import { CsvGeneratorService } from 'src/app/modules/utils/csv-generator.service';
 import { ScoreService } from '../score.service';
 import { Router } from '@angular/router';
+import { GoodnessService } from '../../utils/goodness.service';
 
 @Component({
   selector: 'app-live-feed',
@@ -57,10 +58,12 @@ export class LiveFeedComponent {
     public renderer: RendererService,
     public csvService: CsvGeneratorService,
     public router: Router,
-    public scoreService: ScoreService
+    public scoreService: ScoreService,
+    public goodnessService: GoodnessService
   ) {}
 
   async ngAfterViewInit() {
+    this.goodnessService.loadModel();
     this.video = this.videoElement.nativeElement;
     this.canvas = this.canvasElement.nativeElement;
 
@@ -123,6 +126,11 @@ export class LiveFeedComponent {
 
       poses = poses.concat(pose);
 
+      const predictions = that.goodnessService.make_prediction(pose[0]);
+
+      const goodness =
+        predictions[0] * (predictions[1] / 5) * (that.videoHeight - 40) * -1;
+
       minPoseConfidence = +that.state.singlePoseDetection.minPoseConfidence;
       minPartConfidence = +that.state.singlePoseDetection.minPartConfidence;
 
@@ -133,6 +141,14 @@ export class LiveFeedComponent {
         ctx.scale(-1, 1);
         ctx.translate(-that.videoWidth, 0);
         ctx.drawImage(that.video, 0, 0, that.videoWidth, that.videoHeight);
+        ctx.fillStyle =
+          goodness > (-1 * (that.videoHeight - 40)) / 2 ? '#FF0000' : '#11FF05';
+        ctx.fillRect(
+          20,
+          that.videoHeight - 20,
+          10,
+          goodness > 0 ? -1 : goodness
+        );
         ctx.restore();
       }
 

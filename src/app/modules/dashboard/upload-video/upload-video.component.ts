@@ -1,6 +1,13 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { GoodnessService } from '../../utils/goodness.service';
 import { PosenetService } from '../../utils/posenet.service';
 import { RendererService } from '../../utils/renderer.service';
 import { Upload, UploadService } from '../../utils/upload.service';
@@ -9,11 +16,11 @@ import { ScoreService } from '../score.service';
 @Component({
   selector: 'app-upload-video',
   templateUrl: './upload-video.component.html',
-  styleUrls: ['./upload-video.component.scss']
+  styleUrls: ['./upload-video.component.scss'],
 })
 export class UploadVideoComponent implements OnDestroy {
-  file: File | null = null
-  upload: Upload | undefined
+  file: File | null = null;
+  upload: Upload | undefined;
   @ViewChild('videofeed') videoElement: ElementRef;
   @ViewChild('canvas') canvasElement: ElementRef;
   private videoWidth = 960;
@@ -55,19 +62,22 @@ export class UploadVideoComponent implements OnDestroy {
     net: null,
   };
 
-  private subscription: Subscription | undefined
+  private subscription: Subscription | undefined;
 
-  constructor(public posenetService: PosenetService,
-              public renderer: RendererService,
-              public uploads: UploadService,
-              public service: ScoreService,
-              public router: Router) {}
+  constructor(
+    public posenetService: PosenetService,
+    public renderer: RendererService,
+    public uploads: UploadService,
+    public service: ScoreService,
+    public goodnessService: GoodnessService,
+    public router: Router
+  ) {}
 
   onFileInput(files: FileList | null): void {
+    this.goodnessService.loadModel();
     if (files) {
-      this.file = files.item(0)
+      this.file = files.item(0);
       console.log(files);
-
     }
   }
 
@@ -98,6 +108,11 @@ export class UploadVideoComponent implements OnDestroy {
 
       poses = poses.concat(pose);
 
+      const predictions = that.goodnessService.make_prediction(pose[0]);
+
+      const goodness =
+        predictions[0] * (predictions[1] / 5) * (that.videoHeight - 40) * -1;
+
       minPoseConfidence = +that.state.singlePoseDetection.minPoseConfidence;
       minPartConfidence = +that.state.singlePoseDetection.minPartConfidence;
 
@@ -108,6 +123,14 @@ export class UploadVideoComponent implements OnDestroy {
         ctx.scale(-1, 1);
         ctx.translate(-that.videoWidth, 0);
         ctx.drawImage(that.video, 0, 0, that.videoWidth, that.videoHeight);
+        ctx.fillStyle =
+          goodness > (-1 * (that.videoHeight - 40)) / 2 ? '#FF0000' : '#11FF05';
+        ctx.fillRect(
+          20,
+          that.videoHeight - 20,
+          10,
+          goodness > 0 ? -1 : goodness
+        );
         ctx.restore();
       }
 
@@ -181,15 +204,17 @@ export class UploadVideoComponent implements OnDestroy {
 
   onSubmit() {
     if (this.file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = async (e) => {
         // The file reader gives us an ArrayBuffer:
         let buffer = e.target.result;
         console.log(this.file);
 
         // We have to convert the buffer to a blob:
-        if( typeof buffer != 'string'){
-          let videoBlob = new Blob([new Uint8Array(buffer)], { type: this.file.type });
+        if (typeof buffer != 'string') {
+          let videoBlob = new Blob([new Uint8Array(buffer)], {
+            type: this.file.type,
+          });
 
           // The blob gives us a URL to the video file:
           let url = window.URL.createObjectURL(videoBlob);
@@ -201,13 +226,13 @@ export class UploadVideoComponent implements OnDestroy {
 
           this.posenet = await this.posenetService.getNet({
             width: this.videoWidth / 2,
-            height: this.videoHeight / 2
+            height: this.videoHeight / 2,
           });
 
           this.video.width = this.videoWidth;
           this.video.height = this.videoHeight;
 
-          await this.video.load()
+          await this.video.load();
 
           this.video.addEventListener('loadeddata', () => {
             console.log('start capturing');
@@ -219,18 +244,18 @@ export class UploadVideoComponent implements OnDestroy {
             console.log('Stop capturing');
             this.capture = false;
 
-            this.service.savePosnetPoses( this.generatePosesItems() )
+            this.service.savePosnetPoses(this.generatePosesItems());
             this.poses = [];
 
             this.router.navigate(['/skeleton']);
           });
         }
-      }
-      reader.readAsArrayBuffer(this.file)
+      };
+      reader.readAsArrayBuffer(this.file);
     }
   }
 
   ngOnDestroy() {
-    this.subscription?.unsubscribe()
+    this.subscription?.unsubscribe();
   }
 }
