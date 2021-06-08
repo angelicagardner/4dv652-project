@@ -1,4 +1,26 @@
 <div class="skeleton-container">
+  <div class="rang">
+    <div class="rang-title">
+      <input
+        class="rang-number"
+        id="show"
+        type="text"
+        value="{{ scoreP }}%"
+        disabled="disabled"
+      />
+    </div>
+    <svg class="meter">
+      <circle class="meter-left" r="96" cx="135" cy="142"></circle>
+      <circle class="meter-center" r="96" cx="136" cy="142"></circle>
+      <circle class="meter-right" r="96" cx="138" cy="142"></circle>
+      <polygon
+        class="meter-clock"
+        points="129,145 137,90 145,145"
+        [ngStyle]="{ transform: 'rotate(' + scoreD + 'deg)' }"
+      ></polygon>
+      <circle class="meter-circle" r="10" cx="137" cy="145"></circle>
+    </svg>
+  </div>
   <mat-slider
     #vSlider
     min="0"

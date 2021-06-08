@@ -31,6 +31,8 @@ export class SkeletonComponent implements OnInit {
   private xr = 0;
   private yr = 0;
   isGood = null;
+  public scoreP = 0;
+  public scoreD = -90;
 
   private kinect = [];
 
@@ -43,11 +45,18 @@ export class SkeletonComponent implements OnInit {
     this.service.get_posenet_frames().subscribe((data) => {
       this.service.sendPosnetData(data).subscribe((resp) => {
         this.isGood = resp.isGood;
+        this.scoreUpdate(resp.score);
         this.kinect = resp.frames;
         this.canvas = this.canvasElement.nativeElement;
         this.render(this.kinect);
       });
     });
+  }
+
+  scoreUpdate(score: number) {
+    this.scoreP = ((5 - score) * 100) / 5;
+    this.scoreD = -90 + (this.scoreP * 180) / 100;
+    this.scoreP = Math.round(this.scoreP);
   }
 
   ngOnInit(): void {}
