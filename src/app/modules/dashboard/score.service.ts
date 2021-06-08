@@ -265,6 +265,7 @@ export class ScoreService {
 export interface ModelResponse {
   frames: KinectFrame[];
   isGood: boolean;
+  score: number;
 }
 
 export interface PosnetData {
