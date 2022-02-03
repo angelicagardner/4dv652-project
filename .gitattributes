@@ -1,0 +1,9 @@
+# Default behavior always be linefeed for Linux (LF)
+* text=auto
+* text eol=lf
+
+# Don't change the following file types:
+*.jpg -text
+*.png -text
+*.db -text 
+*.sqlite -text
