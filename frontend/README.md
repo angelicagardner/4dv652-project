@@ -1,3 +1,3 @@
-# 4dv652-frontend
+# Frontend
 
-4DV652 - Project in Data Intensive Systems - Frontend
+This part of the project is a front-end application built with Angular.

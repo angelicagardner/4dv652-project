@@ -1,6 +1,6 @@
-# 4DV652 Backend
+# Backend
 
-This project is part one part in Data Intensive Systems. It's a REST API built with Django/Python which represents the backend component of this system.
+This part of the project is a REST API built with Django.
 
 ## Installing requirements
 

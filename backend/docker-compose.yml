@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  backend:
+    build: 
+      context: ./
+    image: 4dv652-backend
+    hostname: 4dv652-backend
+    container_name: 4dv652-backend
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
+    ports:
+      - "8000:8000"
