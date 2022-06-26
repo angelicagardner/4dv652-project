@@ -1,15 +1,11 @@
-FROM node:latest
+FROM node:16-alpine as builder
 
-RUN mkdir -p /app
-
+COPY . /app
 WORKDIR /app
 
-COPY package*.json /app/
-
 RUN npm install
+RUN npm run build
 
-COPY . /app/
-
-EXPOSE 4200
-
-CMD ["npm", "start"]
+FROM nginx:alpine
+EXPOSE 80
+COPY --from=builder /app/dist/frontend /usr/share/nginx/html
